@@ -10,8 +10,8 @@ pub const Chunck = struct {
         var blockListtemp: std.ArrayList(Block) = .empty;
 
         for (0..8) |x| {
-            for (0..8) |y| {
-                for (0..3) |z| {
+            for (0..8) |z| {
+                for (0..3) |y| {
                     const block: Block = try Block.init(@floatFromInt(x), @floatFromInt(y), @floatFromInt(z));
                     try blockListtemp.append(allocator, block);
                 }

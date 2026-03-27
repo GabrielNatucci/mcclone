@@ -18,7 +18,7 @@ pub const Block = struct {
     }
 
     pub fn render(self: Block) !void {
-        rl.drawCube(rl.Vector3{ .x = self.x, .y = self.y, .z = self.y }, 1.0, 1.0, 1.0, .lime);
+        rl.drawCube(rl.Vector3{ .x = self.x, .y = self.y, .z = self.z }, 1.0, 1.0, 1.0, .lime);
     }
 
     pub fn deinit(self: *Block) !void {
