@@ -1,5 +1,6 @@
 const std = @import("std");
 const rl = @import("raylib");
+const Chunck = @import("core/Chunck.zig").Chunck;
 
 pub fn main() !void {
     rl.initWindow(1280, 720, "MINECLONE");
@@ -13,20 +14,30 @@ pub fn main() !void {
 
     rl.hideCursor();
     rl.disableCursor();
+    rl.setTargetFPS(rl.getMonitorRefreshRate(rl.getCurrentMonitor()));
+    var gpa = std.heap.GeneralPurposeAllocator(.{}){};
+    defer _ = gpa.deinit();
+    const allocator = gpa.allocator();
+
+    var chunck: Chunck = try Chunck.init(allocator);
+
+    // var block1: Block = try Block.init(0.0, 0.0, 0.0);
+    // var block2: Block = try Block.init(2.0, 0.0, 0.0);
 
     while (!rl.windowShouldClose()) {
         rl.updateCamera(&camera, rl.CameraMode.first_person);
 
         rl.beginDrawing();
         rl.clearBackground(.white);
-
         rl.beginMode3D(camera);
 
-        rl.drawCube(rl.Vector3{ .x = 10.0, .y = 0.0, .z = 5.0 }, 10.0, 10.0, 10.0, .lime);
-        rl.endMode3D();
+        try chunck.render();
 
+        rl.endMode3D();
         rl.endDrawing();
 
         std.debug.print("FPS: {}\n", .{rl.getFPS()});
     }
+
+    try chunck.deinit();
 }
