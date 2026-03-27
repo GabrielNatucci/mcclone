@@ -7,13 +7,16 @@ pub const Chunck = struct {
     allocator: std.mem.Allocator,
 
     pub fn init(allocator: std.mem.Allocator) !Chunck {
-        const block1: Block = try Block.init(0.0, 0.0, 0.0);
-        const block2: Block = try Block.init(2.0, 0.0, 0.0);
-
         var blockListtemp: std.ArrayList(Block) = .empty;
 
-        try blockListtemp.append(allocator, block1);
-        try blockListtemp.append(allocator, block2);
+        for (0..8) |x| {
+            for (0..8) |y| {
+                for (0..3) |z| {
+                    const block: Block = try Block.init(@floatFromInt(x), @floatFromInt(y), @floatFromInt(z));
+                    try blockListtemp.append(allocator, block);
+                }
+            }
+        }
 
         return .{
             .blockList = blockListtemp,

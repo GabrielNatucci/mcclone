@@ -1,6 +1,6 @@
 const std = @import("std");
 const rl = @import("raylib");
-const Chunck = @import("core/Chunck.zig").Chunck;
+const World = @import("core/World.zig").World;
 
 pub fn main() !void {
     rl.initWindow(1280, 720, "MINECLONE");
@@ -19,10 +19,7 @@ pub fn main() !void {
     defer _ = gpa.deinit();
     const allocator = gpa.allocator();
 
-    var chunck: Chunck = try Chunck.init(allocator);
-
-    // var block1: Block = try Block.init(0.0, 0.0, 0.0);
-    // var block2: Block = try Block.init(2.0, 0.0, 0.0);
+    var world: World = try World.init(allocator);
 
     while (!rl.windowShouldClose()) {
         rl.updateCamera(&camera, rl.CameraMode.first_person);
@@ -31,7 +28,7 @@ pub fn main() !void {
         rl.clearBackground(.white);
         rl.beginMode3D(camera);
 
-        try chunck.render();
+        try world.render();
 
         rl.endMode3D();
         rl.endDrawing();
@@ -39,5 +36,5 @@ pub fn main() !void {
         std.debug.print("FPS: {}\n", .{rl.getFPS()});
     }
 
-    try chunck.deinit();
+    try world.deinit();
 }
