@@ -25,6 +25,9 @@ pub const World = struct {
     }
 
     pub fn deinit(self: *World) !void {
+        for (self.chunckList.items) |*chunk| {
+            try chunk.deinit();
+        }
         self.chunckList.deinit(self.allocator);
     }
 };
