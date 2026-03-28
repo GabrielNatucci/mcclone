@@ -85,22 +85,22 @@ pub const Block = struct {
         rl.gl.rlNormal3f(1.0, 0.0, 0.0);
         rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v0);
         rl.gl.rlVertex3f(self.x + half, self.y + half, self.z - half);
-        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v1);
+        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v0);
         rl.gl.rlVertex3f(self.x + half, self.y + half, self.z + half);
         rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v1);
         rl.gl.rlVertex3f(self.x + half, self.y - half, self.z + half);
-        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v0);
+        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v1);
         rl.gl.rlVertex3f(self.x + half, self.y - half, self.z - half);
 
         // Face Esquerda (X-) - Side
         rl.gl.rlNormal3f(-1.0, 0.0, 0.0);
         rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v0);
         rl.gl.rlVertex3f(self.x - half, self.y + half, self.z - half);
-        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v0);
+        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v1);
         rl.gl.rlVertex3f(self.x - half, self.y - half, self.z - half);
         rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v1);
         rl.gl.rlVertex3f(self.x - half, self.y - half, self.z + half);
-        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v1);
+        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v0);
         rl.gl.rlVertex3f(self.x - half, self.y + half, self.z + half);
 
         rl.gl.rlEnd();
@@ -142,8 +142,8 @@ fn getBlockUVs(block_type: BlockType) BlockUV {
 
 fn uv(tile_x: f32, tile_y: f32) UV {
     const u_0 = (tile_x * TILE_SIZE) / ATLAS_SIZE;
-    const v_0 = (tile_y * TILE_SIZE) / ATLAS_SIZE;
     const u_1 = ((tile_x + 1) * TILE_SIZE) / ATLAS_SIZE;
+    const v_0 = (tile_y * TILE_SIZE) / ATLAS_SIZE;
     const v_1 = ((tile_y + 1) * TILE_SIZE) / ATLAS_SIZE;
 
     return .{ .u0 = u_0, .v0 = v_0, .u1 = u_1, .v1 = v_1 };

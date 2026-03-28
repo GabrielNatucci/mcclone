@@ -3,7 +3,7 @@ const rl = @import("raylib");
 const World = @import("core/World.zig").World;
 
 pub fn main() !void {
-    rl.initWindow(1280, 720, "MINECLONE");
+    rl.initWindow(1920, 1080, "MINECLONE");
 
     var camera = std.mem.zeroes(rl.Camera);
     camera.position = rl.Vector3{ .x = 0.0, .y = 10.0, .z = 10.0 };
@@ -14,7 +14,7 @@ pub fn main() !void {
 
     rl.hideCursor();
     rl.disableCursor();
-    rl.setTargetFPS(rl.getMonitorRefreshRate(rl.getCurrentMonitor()));
+    // rl.setTargetFPS(rl.getMonitorRefreshRate(rl.getCurrentMonitor()));
 
     const atlas = try rl.loadTexture("assets/blocks/blockatlas.png");
     defer rl.unloadTexture(atlas);
@@ -35,9 +35,9 @@ pub fn main() !void {
         try world.render(atlas);
 
         rl.endMode3D();
-        rl.endDrawing();
 
-        std.debug.print("FPS: {}\n", .{rl.getFPS()});
+        rl.drawFPS(10, 10);
+        rl.endDrawing();
     }
 
     try world.deinit();
