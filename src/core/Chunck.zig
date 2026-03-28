@@ -12,7 +12,7 @@ pub const Chunck = struct {
         for (0..8) |x| {
             for (0..8) |z| {
                 for (0..3) |y| {
-                    const block: Block = try Block.init(@floatFromInt(x), @floatFromInt(y), @floatFromInt(z), .dirt);
+                    const block: Block = try Block.init(@floatFromInt(x), @floatFromInt(y), @floatFromInt(z), .grass);
                     try blockListtemp.append(allocator, block);
                 }
             }

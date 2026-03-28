@@ -38,40 +38,70 @@ pub const Block = struct {
         rl.gl.rlColor4ub(255, 255, 255, 255);
 
         // Face Frontal (Z+) - Side
-        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v1); rl.gl.rlVertex3f(self.x - half, self.y - half, self.z + half);
-        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v1); rl.gl.rlVertex3f(self.x + half, self.y - half, self.z + half);
-        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v0); rl.gl.rlVertex3f(self.x + half, self.y + half, self.z + half);
-        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v0); rl.gl.rlVertex3f(self.x - half, self.y + half, self.z + half);
+        rl.gl.rlNormal3f(0.0, 0.0, 1.0);
+        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v1);
+        rl.gl.rlVertex3f(self.x - half, self.y - half, self.z + half);
+        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v1);
+        rl.gl.rlVertex3f(self.x + half, self.y - half, self.z + half);
+        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v0);
+        rl.gl.rlVertex3f(self.x + half, self.y + half, self.z + half);
+        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v0);
+        rl.gl.rlVertex3f(self.x - half, self.y + half, self.z + half);
 
         // Face Traseira (Z-) - Side
-        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v1); rl.gl.rlVertex3f(self.x - half, self.y - half, self.z - half);
-        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v0); rl.gl.rlVertex3f(self.x - half, self.y + half, self.z - half);
-        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v0); rl.gl.rlVertex3f(self.x + half, self.y + half, self.z - half);
-        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v1); rl.gl.rlVertex3f(self.x + half, self.y - half, self.z - half);
+        rl.gl.rlNormal3f(0.0, 0.0, -1.0);
+        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v1);
+        rl.gl.rlVertex3f(self.x - half, self.y - half, self.z - half);
+        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v0);
+        rl.gl.rlVertex3f(self.x - half, self.y + half, self.z - half);
+        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v0);
+        rl.gl.rlVertex3f(self.x + half, self.y + half, self.z - half);
+        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v1);
+        rl.gl.rlVertex3f(self.x + half, self.y - half, self.z - half);
 
         // Face Superior (Y+) - Top
-        rl.gl.rlTexCoord2f(uvs.top.u0, uvs.top.v0); rl.gl.rlVertex3f(self.x - half, self.y + half, self.z - half);
-        rl.gl.rlTexCoord2f(uvs.top.u0, uvs.top.v1); rl.gl.rlVertex3f(self.x - half, self.y + half, self.z + half);
-        rl.gl.rlTexCoord2f(uvs.top.u1, uvs.top.v1); rl.gl.rlVertex3f(self.x + half, self.y + half, self.z + half);
-        rl.gl.rlTexCoord2f(uvs.top.u1, uvs.top.v0); rl.gl.rlVertex3f(self.x + half, self.y + half, self.z - half);
+        rl.gl.rlNormal3f(0.0, 1.0, 0.0);
+        rl.gl.rlTexCoord2f(uvs.top.u0, uvs.top.v0);
+        rl.gl.rlVertex3f(self.x - half, self.y + half, self.z - half);
+        rl.gl.rlTexCoord2f(uvs.top.u0, uvs.top.v1);
+        rl.gl.rlVertex3f(self.x - half, self.y + half, self.z + half);
+        rl.gl.rlTexCoord2f(uvs.top.u1, uvs.top.v1);
+        rl.gl.rlVertex3f(self.x + half, self.y + half, self.z + half);
+        rl.gl.rlTexCoord2f(uvs.top.u1, uvs.top.v0);
+        rl.gl.rlVertex3f(self.x + half, self.y + half, self.z - half);
 
         // Face Inferior (Y-) - Bottom
-        rl.gl.rlTexCoord2f(uvs.bottom.u1, uvs.bottom.v0); rl.gl.rlVertex3f(self.x - half, self.y - half, self.z - half);
-        rl.gl.rlTexCoord2f(uvs.bottom.u0, uvs.bottom.v0); rl.gl.rlVertex3f(self.x + half, self.y - half, self.z - half);
-        rl.gl.rlTexCoord2f(uvs.bottom.u0, uvs.bottom.v1); rl.gl.rlVertex3f(self.x + half, self.y - half, self.z + half);
-        rl.gl.rlTexCoord2f(uvs.bottom.u1, uvs.bottom.v1); rl.gl.rlVertex3f(self.x - half, self.y - half, self.z + half);
+        rl.gl.rlNormal3f(0.0, -1.0, 0.0);
+        rl.gl.rlTexCoord2f(uvs.bottom.u1, uvs.bottom.v0);
+        rl.gl.rlVertex3f(self.x - half, self.y - half, self.z - half);
+        rl.gl.rlTexCoord2f(uvs.bottom.u0, uvs.bottom.v0);
+        rl.gl.rlVertex3f(self.x + half, self.y - half, self.z - half);
+        rl.gl.rlTexCoord2f(uvs.bottom.u0, uvs.bottom.v1);
+        rl.gl.rlVertex3f(self.x + half, self.y - half, self.z + half);
+        rl.gl.rlTexCoord2f(uvs.bottom.u1, uvs.bottom.v1);
+        rl.gl.rlVertex3f(self.x - half, self.y - half, self.z + half);
 
         // Face Direita (X+) - Side
-        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v0); rl.gl.rlVertex3f(self.x + half, self.y + half, self.z - half);
-        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v1); rl.gl.rlVertex3f(self.x + half, self.y + half, self.z + half);
-        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v1); rl.gl.rlVertex3f(self.x + half, self.y - half, self.z + half);
-        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v0); rl.gl.rlVertex3f(self.x + half, self.y - half, self.z - half);
+        rl.gl.rlNormal3f(1.0, 0.0, 0.0);
+        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v0);
+        rl.gl.rlVertex3f(self.x + half, self.y + half, self.z - half);
+        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v1);
+        rl.gl.rlVertex3f(self.x + half, self.y + half, self.z + half);
+        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v1);
+        rl.gl.rlVertex3f(self.x + half, self.y - half, self.z + half);
+        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v0);
+        rl.gl.rlVertex3f(self.x + half, self.y - half, self.z - half);
 
         // Face Esquerda (X-) - Side
-        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v0); rl.gl.rlVertex3f(self.x - half, self.y + half, self.z - half);
-        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v0); rl.gl.rlVertex3f(self.x - half, self.y - half, self.z - half);
-        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v1); rl.gl.rlVertex3f(self.x - half, self.y - half, self.z + half);
-        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v1); rl.gl.rlVertex3f(self.x - half, self.y + half, self.z + half);
+        rl.gl.rlNormal3f(-1.0, 0.0, 0.0);
+        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v0);
+        rl.gl.rlVertex3f(self.x - half, self.y + half, self.z - half);
+        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v0);
+        rl.gl.rlVertex3f(self.x - half, self.y - half, self.z - half);
+        rl.gl.rlTexCoord2f(uvs.side.u1, uvs.side.v1);
+        rl.gl.rlVertex3f(self.x - half, self.y - half, self.z + half);
+        rl.gl.rlTexCoord2f(uvs.side.u0, uvs.side.v1);
+        rl.gl.rlVertex3f(self.x - half, self.y + half, self.z + half);
 
         rl.gl.rlEnd();
         rl.gl.rlSetTexture(0);
@@ -92,7 +122,6 @@ const BlockUV = struct {
 
 fn getBlockUVs(block_type: BlockType) BlockUV {
     return switch (block_type) {
-        // Cada bloco ocupa 3 espaços horizontais (Side, Top, Bottom)
         .grass => .{
             .side = uv(0, 0),
             .top = uv(1, 0),
