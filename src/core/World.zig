@@ -18,9 +18,9 @@ pub const World = struct {
         };
     }
 
-    pub fn render(self: World) !void {
+    pub fn render(self: World, atlas_texture: rl.Texture2D) !void {
         for (self.chunckList.items) |value| {
-            try value.render();
+            try value.render(atlas_texture);
         }
     }
 

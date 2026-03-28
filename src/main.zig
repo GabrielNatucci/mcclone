@@ -15,6 +15,10 @@ pub fn main() !void {
     rl.hideCursor();
     rl.disableCursor();
     rl.setTargetFPS(rl.getMonitorRefreshRate(rl.getCurrentMonitor()));
+
+    const atlas = try rl.loadTexture("assets/blocks/blockatlas.png");
+    defer rl.unloadTexture(atlas);
+
     var gpa = std.heap.GeneralPurposeAllocator(.{}){};
     defer _ = gpa.deinit();
     const allocator = gpa.allocator();
@@ -28,7 +32,7 @@ pub fn main() !void {
         rl.clearBackground(.white);
         rl.beginMode3D(camera);
 
-        try world.render();
+        try world.render(atlas);
 
         rl.endMode3D();
         rl.endDrawing();

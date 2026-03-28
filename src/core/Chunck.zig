@@ -12,7 +12,7 @@ pub const Chunck = struct {
         for (0..8) |x| {
             for (0..8) |z| {
                 for (0..3) |y| {
-                    const block: Block = try Block.init(@floatFromInt(x), @floatFromInt(y), @floatFromInt(z));
+                    const block: Block = try Block.init(@floatFromInt(x), @floatFromInt(y), @floatFromInt(z), .dirt);
                     try blockListtemp.append(allocator, block);
                 }
             }
@@ -24,9 +24,9 @@ pub const Chunck = struct {
         };
     }
 
-    pub fn render(self: Chunck) !void {
+    pub fn render(self: Chunck, atlas_texture: rl.Texture2D) !void {
         for (self.blockList.items) |value| {
-            try value.render();
+            try value.render(atlas_texture);
         }
     }
 
