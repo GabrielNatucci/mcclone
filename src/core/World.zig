@@ -9,10 +9,10 @@ pub const World = struct {
     pub fn init(allocator: std.mem.Allocator) !World {
         var chunkListtemp: std.ArrayList(Chunck) = .empty;
 
-        var z: c_int = 0;
-        while (z < 3) : (z += 1) {
-            var x: c_int = 0;
-            while (x < 3) : (x += 1) {
+        var z: c_int = -4;
+        while (z < 4) : (z += 1) {
+            var x: c_int = -4;
+            while (x < 4) : (x += 1) {
                 const chunk = try Chunck.init(allocator, x, z);
                 try chunkListtemp.append(allocator, chunk);
             }
