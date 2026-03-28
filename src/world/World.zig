@@ -1,13 +1,19 @@
+
 const std = @import("std");
 const rl = @import("raylib");
 const Chunck = @import("Chunck.zig").Chunck;
 
+pub const ChunkPos = struct {
+    x: c_int,
+    z: c_int,
+};
+
 pub const World = struct {
-    chunckList: std.ArrayList(Chunck),
+    chunckMap: std.AutoHashMap(ChunkPos, Chunck),
     allocator: std.mem.Allocator,
 
     pub fn init(allocator: std.mem.Allocator) !World {
-        var chunkListtemp: std.ArrayList(Chunck) = .empty;
+        var chunkMap = std.AutoHashMap(ChunkPos, Chunck).init(allocator);
 
         var z: c_int = -8;
         while (z < 8) : (z += 1) {
@@ -15,12 +21,12 @@ pub const World = struct {
             while (x < 8) : (x += 1) {
                 var chunk = try Chunck.init(allocator, x, z);
                 try chunk.update();
-                try chunkListtemp.append(allocator, chunk);
+                try chunkMap.put(.{ .x = x, .z = z }, chunk);
             }
         }
 
         return .{
-            .chunckList = chunkListtemp,
+            .chunckMap = chunkMap,
             .allocator = allocator,
         };
     }
@@ -33,17 +39,19 @@ pub const World = struct {
     pub fn render(self: World, atlas_texture: rl.Texture2D) !void {
         rl.gl.rlBegin(rl.gl.rl_quads);
         rl.gl.rlSetTexture(atlas_texture.id);
-        for (self.chunckList.items) |value| {
-            try value.render(atlas_texture);
+        var it = self.chunckMap.iterator();
+        while (it.next()) |entry| {
+            try entry.value_ptr.render(atlas_texture);
         }
         rl.gl.rlEnd();
         rl.gl.rlSetTexture(0);
     }
 
     pub fn deinit(self: *World) !void {
-        for (self.chunckList.items) |*chunk| {
-            try chunk.deinit();
+        var it = self.chunckMap.iterator();
+        while (it.next()) |entry| {
+            try entry.value_ptr.deinit();
         }
-        self.chunckList.deinit(self.allocator);
+        self.chunckMap.deinit();
     }
 };
