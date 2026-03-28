@@ -13,7 +13,8 @@ pub const World = struct {
         while (z < 4) : (z += 1) {
             var x: c_int = -4;
             while (x < 4) : (x += 1) {
-                const chunk = try Chunck.init(allocator, x, z);
+                var chunk = try Chunck.init(allocator, x, z);
+                try chunk.update();
                 try chunkListtemp.append(allocator, chunk);
             }
         }
@@ -30,9 +31,13 @@ pub const World = struct {
     }
 
     pub fn render(self: World, atlas_texture: rl.Texture2D) !void {
+        rl.gl.rlBegin(rl.gl.rl_quads);
+        rl.gl.rlSetTexture(atlas_texture.id);
         for (self.chunckList.items) |value| {
             try value.render(atlas_texture);
         }
+        rl.gl.rlEnd();
+        rl.gl.rlSetTexture(0);
     }
 
     pub fn deinit(self: *World) !void {

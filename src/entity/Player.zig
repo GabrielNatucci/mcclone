@@ -26,7 +26,10 @@ pub const Player = struct {
 
     pub fn render(self: Player, atlas_texture: rl.Texture2D) !void {
         _ = atlas_texture;
+        _ = self;
+    }
 
+    pub fn renderPos(self: Player) !void {
         var text_buf: [128]u8 = undefined;
         const post_text = try std.fmt.bufPrintZ(&text_buf, "PLAYER POSITION\n X:{d:.2}\n Y:{d:.2}\n Z:{d:.2}\n", .{ self.camera.position.x, self.camera.position.y, self.camera.position.z });
         rl.drawText(post_text, 10, 30, 20, .black);

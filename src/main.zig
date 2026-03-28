@@ -48,6 +48,7 @@ pub fn main() !void {
 
         rl.endMode3D();
 
+        try player.renderPos();
         rl.drawFPS(10, 10);
         rl.endDrawing();
     }

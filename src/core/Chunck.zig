@@ -3,11 +3,11 @@ const rl = @import("raylib");
 const Block = @import("Block.zig");
 
 pub const Chunck = struct {
-    blockList: std.ArrayList(Block.Block),
+    blockMap: std.AutoHashMap([3]i32, Block.Block),
     allocator: std.mem.Allocator,
 
     pub fn init(allocator: std.mem.Allocator, varx: c_int, varz: c_int) !Chunck {
-        var blockListtemp: std.ArrayList(Block.Block) = .empty;
+        var blockMap = std.AutoHashMap([3]i32, Block.Block).init(allocator);
 
         var x: i32 = -4;
         while (x < 4) : (x += 1) {
@@ -20,25 +20,50 @@ pub const Chunck = struct {
                         typevalue = Block.BlockType.grass;
                     }
 
-                    const block: Block.Block = try Block.Block.init(@floatFromInt(x + varx*8), @floatFromInt(y), @floatFromInt(z + varz*8), typevalue);
-                    try blockListtemp.append(allocator, block);
+                    const pos_x: i32 = x + @as(i32, @intCast(varx)) * 8;
+                    const pos_y: i32 = y;
+                    const pos_z: i32 = z + @as(i32, @intCast(varz)) * 8;
+
+                    const block: Block.Block = try Block.Block.init(@floatFromInt(pos_x), @floatFromInt(pos_y), @floatFromInt(pos_z), typevalue);
+                    try blockMap.put([3]i32{ pos_x, pos_y, pos_z }, block);
                 }
             }
         }
 
         return .{
-            .blockList = blockListtemp,
+            .blockMap = blockMap,
             .allocator = allocator,
         };
     }
 
+    pub fn hasBlock(self: Chunck, x: i32, y: i32, z: i32) bool {
+        return self.blockMap.contains([3]i32{ x, y, z });
+    }
+
+    pub fn getBlock(self: Chunck, x: i32, y: i32, z: i32) ?Block.Block {
+        return self.blockMap.get([3]i32{ x, y, z });
+    }
+
+    pub fn update(self: *Chunck) !void {
+        var it = self.blockMap.valueIterator();
+        while (it.next()) |block| {
+            block.renderBottom = false;
+            block.renderXminus = false;
+            block.renderXplus = false;
+            block.renderZplus = false;
+            block.renderZminus = false;
+        }
+    }
+
+
     pub fn render(self: Chunck, atlas_texture: rl.Texture2D) !void {
-        for (self.blockList.items) |value| {
-            try value.render(atlas_texture);
+        var it = self.blockMap.valueIterator();
+        while (it.next()) |block| {
+            try block.*.render(atlas_texture);
         }
     }
 
     pub fn deinit(self: *Chunck) !void {
-        self.blockList.deinit(self.allocator);
+        self.blockMap.deinit();
     }
 };
