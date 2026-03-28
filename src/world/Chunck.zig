@@ -47,14 +47,34 @@ pub const Chunck = struct {
     pub fn update(self: *Chunck) !void {
         var it = self.blockMap.valueIterator();
         while (it.next()) |block| {
-            block.renderBottom = false;
-            block.renderXminus = false;
-            block.renderXplus = false;
-            block.renderZplus = false;
-            block.renderZminus = false;
+            const xPos:i32 = @intFromFloat(block.x);
+            const yPos:i32 = @intFromFloat(block.y);
+            const zPos:i32 = @intFromFloat(block.z);
+
+            if (self.hasBlock(xPos + 1, yPos, zPos)) {
+                block.renderXplus = false;
+            }
+
+            if (self.hasBlock(xPos - 1, yPos, zPos)) {
+                block.renderXminus = false;
+            }
+
+            if (self.hasBlock(xPos, yPos, zPos - 1)) {
+                block.renderZminus = false;
+            }
+
+            if (self.hasBlock(xPos, yPos, zPos + 1)) {
+                block.renderZplus = false;
+            }
+
+            if (self.hasBlock(xPos, yPos + 1, zPos)) {
+                block.renderTop = false;
+            }
+            if (self.hasBlock(xPos, yPos + 1, zPos)) {
+                block.renderBottom = false;
+            }
         }
     }
-
 
     pub fn render(self: Chunck, atlas_texture: rl.Texture2D) !void {
         var it = self.blockMap.valueIterator();

@@ -1,6 +1,6 @@
 const std = @import("std");
 const rl = @import("raylib");
-const World = @import("core/World.zig").World;
+const World = @import("world/World.zig").World;
 const Player = @import("entity/Player.zig").Player;
 
 pub fn main() !void {
