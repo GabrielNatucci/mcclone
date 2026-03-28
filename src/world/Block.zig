@@ -35,10 +35,9 @@ pub const Block = struct {
         };
     }
 
-    pub fn render(self: Block, atlas_texture: rl.Texture2D) !void {
+    pub fn render(self: Block) !void {
         const uvs = getBlockUVs(self.block_type);
         const half: f32 = 0.5;
-        _ = atlas_texture;
 
         rl.gl.rlColor4ub(255, 255, 255, 255);
 

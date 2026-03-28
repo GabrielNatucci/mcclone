@@ -41,7 +41,7 @@ pub const World = struct {
         rl.gl.rlSetTexture(atlas_texture.id);
         var it = self.chunckMap.iterator();
         while (it.next()) |entry| {
-            try entry.value_ptr.render(atlas_texture);
+            try entry.value_ptr.render();
         }
         rl.gl.rlEnd();
         rl.gl.rlSetTexture(0);

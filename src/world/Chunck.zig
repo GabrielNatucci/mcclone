@@ -77,10 +77,10 @@ pub const Chunck = struct {
         }
     }
 
-    pub fn render(self: Chunck, atlas_texture: rl.Texture2D) !void {
+    pub fn render(self: Chunck) !void {
         var it = self.blockMap.valueIterator();
         while (it.next()) |block| {
-            try block.*.render(atlas_texture);
+            try block.*.render();
         }
     }
 
