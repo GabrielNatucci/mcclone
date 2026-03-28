@@ -24,6 +24,11 @@ pub const World = struct {
         };
     }
 
+    pub fn update(self: *World, position: rl.Vector3) !void {
+        _ = self;
+        _ = position;
+    }
+
     pub fn render(self: World, atlas_texture: rl.Texture2D) !void {
         for (self.chunckList.items) |value| {
             try value.render(atlas_texture);
