@@ -4,6 +4,7 @@ const rl = @import("raylib");
 pub const Player = struct {
     camera: rl.Camera,
     allocator: std.mem.Allocator,
+    speedy: f32,
 
     pub fn init(allocator: std.mem.Allocator) !Player {
         var camera = std.mem.zeroes(rl.Camera);
@@ -15,12 +16,24 @@ pub const Player = struct {
         return .{
             .allocator = allocator,
             .camera = camera,
+            .speedy = -1,
         };
     }
 
     pub fn update(self: *Player, frameTime: f32) !void {
         if (self.camera.position.y > 5) {
-            self.camera.position.y -= 10 * frameTime;
+            self.speedy -= 20 * frameTime;
+        } else {
+            self.speedy = 0;
+            self.camera.position.y = 5;
+
+            if (rl.isKeyPressed(rl.KeyboardKey.space)) {
+                self.speedy = 10;
+            }
+        }
+
+        if (self.speedy != 0) {
+            self.camera.position.y += self.speedy * frameTime;
         }
     }
 
@@ -31,7 +44,7 @@ pub const Player = struct {
 
     pub fn renderPos(self: Player) !void {
         var text_buf: [128]u8 = undefined;
-        const post_text = try std.fmt.bufPrintZ(&text_buf, "PLAYER POSITION\n X:{d:.2}\n Y:{d:.2}\n Z:{d:.2}\n", .{ self.camera.position.x, self.camera.position.y, self.camera.position.z });
+        const post_text = try std.fmt.bufPrintZ(&text_buf, "PLAYER POSITION\n X:{d:.2}\n Y:{d:.2}\n Z:{d:.2}\n SPEEDY:{d:.2}", .{ self.camera.position.x, self.camera.position.y, self.camera.position.z, self.speedy });
         rl.drawText(post_text, 10, 30, 20, .black);
     }
 

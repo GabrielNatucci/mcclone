@@ -21,6 +21,8 @@ pub fn main() !void {
 
     var wireframe = false;
 
+    // rl.setTargetFPS(60);
+
     while (!rl.windowShouldClose()) {
         if (rl.isKeyPressed(rl.KeyboardKey.f10)) {
             wireframe = !wireframe;
