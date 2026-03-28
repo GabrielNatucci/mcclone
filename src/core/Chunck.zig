@@ -1,18 +1,25 @@
 const std = @import("std");
 const rl = @import("raylib");
-const Block = @import("Block.zig").Block;
+const Block = @import("Block.zig");
 
 pub const Chunck = struct {
-    blockList: std.ArrayList(Block),
+    blockList: std.ArrayList(Block.Block),
     allocator: std.mem.Allocator,
 
     pub fn init(allocator: std.mem.Allocator) !Chunck {
-        var blockListtemp: std.ArrayList(Block) = .empty;
+        var blockListtemp: std.ArrayList(Block.Block) = .empty;
 
-        for (0..8) |x| {
-            for (0..8) |z| {
-                for (0..3) |y| {
-                    const block: Block = try Block.init(@floatFromInt(x), @floatFromInt(y), @floatFromInt(z), .grass);
+        var x: i32 = -4;
+        while (x < 4) : (x += 1) {
+            var z: i32 = -4;
+            while (z < 4) : (z += 1) {
+                var y: i32 = 0;
+                while (y < 3) : (y += 1) {
+                    var typevalue = Block.BlockType.dirt;
+                    if (y == 2) {
+                        typevalue = Block.BlockType.grass;
+                    }
+                    const block: Block.Block = try Block.Block.init(@floatFromInt(x), @floatFromInt(y), @floatFromInt(z), typevalue);
                     try blockListtemp.append(allocator, block);
                 }
             }
