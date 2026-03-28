@@ -47,9 +47,9 @@ pub const Chunck = struct {
     pub fn update(self: *Chunck) !void {
         var it = self.blockMap.valueIterator();
         while (it.next()) |block| {
-            const xPos:i32 = @intFromFloat(block.x);
-            const yPos:i32 = @intFromFloat(block.y);
-            const zPos:i32 = @intFromFloat(block.z);
+            const xPos: i32 = @intFromFloat(block.x);
+            const yPos: i32 = @intFromFloat(block.y);
+            const zPos: i32 = @intFromFloat(block.z);
 
             if (self.hasBlock(xPos + 1, yPos, zPos)) {
                 block.renderXplus = false;
@@ -70,6 +70,7 @@ pub const Chunck = struct {
             if (self.hasBlock(xPos, yPos + 1, zPos)) {
                 block.renderTop = false;
             }
+
             if (self.hasBlock(xPos, yPos + 1, zPos)) {
                 block.renderBottom = false;
             }
