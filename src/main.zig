@@ -9,12 +9,11 @@ pub fn main() !void {
     camera.position = rl.Vector3{ .x = 0.0, .y = 10.0, .z = 10.0 };
     camera.target = rl.Vector3{ .x = 0.0, .y = 0.0, .z = 0.0 };
     camera.up = rl.Vector3{ .x = 0.0, .y = 1.0, .z = 0.0 };
-    camera.fovy = 45.0;
+    camera.fovy = 75.0;
     camera.projection = rl.CameraProjection.perspective;
 
     rl.hideCursor();
     rl.disableCursor();
-    // rl.setTargetFPS(rl.getMonitorRefreshRate(rl.getCurrentMonitor()));
 
     const atlas = try rl.loadTexture("assets/blocks/blockatlas.png");
     defer rl.unloadTexture(atlas);

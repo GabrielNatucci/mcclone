@@ -6,7 +6,7 @@ pub const Chunck = struct {
     blockList: std.ArrayList(Block.Block),
     allocator: std.mem.Allocator,
 
-    pub fn init(allocator: std.mem.Allocator) !Chunck {
+    pub fn init(allocator: std.mem.Allocator, varx: c_int, varz: c_int) !Chunck {
         var blockListtemp: std.ArrayList(Block.Block) = .empty;
 
         var x: i32 = -4;
@@ -19,7 +19,8 @@ pub const Chunck = struct {
                     if (y == 2) {
                         typevalue = Block.BlockType.grass;
                     }
-                    const block: Block.Block = try Block.Block.init(@floatFromInt(x), @floatFromInt(y), @floatFromInt(z), typevalue);
+
+                    const block: Block.Block = try Block.Block.init(@floatFromInt(x + varx*8), @floatFromInt(y), @floatFromInt(z + varz*8), typevalue);
                     try blockListtemp.append(allocator, block);
                 }
             }
