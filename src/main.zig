@@ -16,9 +16,8 @@ pub fn main() !void {
     defer _ = gpa.deinit();
     const allocator = gpa.allocator();
 
-    var world: World = try World.init(allocator);
     var player = try Player.init(allocator);
-    try world.update(player.camera.position);
+    var world: World = try World.init(allocator);
 
     var wireframe = false;
 
@@ -28,6 +27,7 @@ pub fn main() !void {
         }
 
         try player.update(rl.getFrameTime());
+        try world.update(player.camera.position);
 
         rl.updateCamera(&player.camera, rl.CameraMode.first_person);
 

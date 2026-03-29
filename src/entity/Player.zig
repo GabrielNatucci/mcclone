@@ -8,7 +8,7 @@ pub const Player = struct {
 
     pub fn init(allocator: std.mem.Allocator) !Player {
         var camera = std.mem.zeroes(rl.Camera);
-        camera.position = rl.Vector3{ .x = 0.0, .y = 50.0, .z = 10.0 };
+        camera.position = rl.Vector3{ .x = 0.0, .y = 50.0, .z = 0.1 };
         camera.up = rl.Vector3{ .x = 0.0, .y = 1.0, .z = 0.0 };
         camera.fovy = 75.0;
         camera.projection = rl.CameraProjection.perspective;

@@ -5,9 +5,20 @@ const Block = @import("Block.zig");
 pub const Chunck = struct {
     blockMap: std.AutoHashMap([3]i32, Block.Block),
     allocator: std.mem.Allocator,
+    x: i32,
+    z: i32,
+    xmax: i32,
+    xmin: i32,
+    zmax: i32,
+    zmin: i32,
 
     pub fn init(allocator: std.mem.Allocator, varx: c_int, varz: c_int) !Chunck {
         var blockMap = std.AutoHashMap([3]i32, Block.Block).init(allocator);
+
+        var xmax: i32 = std.math.minInt(i32);
+        var xmin: i32 = std.math.maxInt(i32);
+        var zmax: i32 = std.math.minInt(i32);
+        var zmin: i32 = std.math.maxInt(i32);
 
         var x: i32 = -4;
         while (x < 4) : (x += 1) {
@@ -24,6 +35,11 @@ pub const Chunck = struct {
                     const pos_y: i32 = y;
                     const pos_z: i32 = z + @as(i32, @intCast(varz)) * 8;
 
+                    if (pos_x > xmax) xmax = pos_x;
+                    if (pos_x < xmin) xmin = pos_x;
+                    if (pos_z > zmax) zmax = pos_z;
+                    if (pos_z < zmin) zmin = pos_z;
+
                     const block: Block.Block = try Block.Block.init(@floatFromInt(pos_x), @floatFromInt(pos_y), @floatFromInt(pos_z), typevalue);
                     try blockMap.put([3]i32{ pos_x, pos_y, pos_z }, block);
                 }
@@ -33,6 +49,12 @@ pub const Chunck = struct {
         return .{
             .blockMap = blockMap,
             .allocator = allocator,
+            .xmax = xmax,
+            .xmin = xmin,
+            .zmax = zmax,
+            .zmin = zmin,
+            .x = varx,
+            .z = varz,
         };
     }
 
