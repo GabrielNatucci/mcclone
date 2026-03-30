@@ -15,7 +15,7 @@ pub const ChunkPos = struct {
 pub const World = struct {
     chunckMap: std.AutoHashMap(ChunkPos, Chunck),
     allocator: std.mem.Allocator,
-    currentChunckPos: ChunkPos,
+    currentChunk: Chunck,
 
     pub fn init(allocator: std.mem.Allocator) !World {
         var chunkMap = std.AutoHashMap(ChunkPos, Chunck).init(allocator);
@@ -33,51 +33,49 @@ pub const World = struct {
         return .{
             .chunckMap = chunkMap,
             .allocator = allocator,
-            .currentChunckPos = .{ .x = 0, .z = 0 },
+            .currentChunk = chunkMap.get(.{ .x = 0, .z = 0 }).?,
         };
     }
 
-    pub fn update(self: *World, position: rl.Vector3) !void {
-        const lastChunck = self.getChunck(self.currentChunckPos.x, self.currentChunckPos.z);
+    pub fn updateChunkMoving(self: *World, position: rl.Vector3) !void {
         const pos_x: f32 = position.x;
         const pos_z: f32 = position.z;
-        var hasUpdated: bool = false;
+        const chun = self.currentChunk;
 
-        if (lastChunck) |chun| {
-            if (!(chun.xmax > pos_x and chun.xmin < pos_x and chun.zmax > pos_z and chun.zmin < pos_z)) {
-                std.debug.print("chun minmax: Xmin:{} Xmax:{} Zmin:{} Zmax{}\n", .{ chun.xmin, chun.xmax, chun.zmin, chun.zmax });
-                var chuncklist: std.ArrayList(*Chunck) = .empty;
-                defer chuncklist.deinit(self.allocator);
-                var it = self.chunckMap.iterator();
+        if (!(chun.xmax > pos_x and chun.xmin < pos_x and chun.zmax > pos_z and chun.zmin < pos_z)) {
+            std.debug.print("chun minmax: Xmin:{} Xmax:{} Zmin:{} Zmax{}\n", .{ chun.xmin, chun.xmax, chun.zmin, chun.zmax });
+            var chuncklist: std.ArrayList(*Chunck) = .empty;
+            defer chuncklist.deinit(self.allocator);
+            var it = self.chunckMap.iterator();
 
-                while (it.next()) |entry| {
-                    const chunck = entry.value_ptr;
+            var hasUpdated: bool = false;
 
-                    if (chunck.xmax > pos_x and chunck.xmin < pos_x and chunck.zmax > pos_z and chunck.zmin < pos_z) {
-                        self.currentChunckPos = .{ .x = chunck.x, .z = chunck.z };
-                        hasUpdated = true;
-                        std.debug.print("CHUNKPOS ATT:\nX:{}\nZ:{}\n ", .{ self.currentChunckPos.x, self.currentChunckPos.z });
-                    }
+            while (it.next()) |entry| {
+                const chunck = entry.value_ptr;
 
-                    try chuncklist.append(self.allocator, chunck);
+                if (chunck.xmax > pos_x and chunck.xmin < pos_x and chunck.zmax > pos_z and chunck.zmin < pos_z) {
+                    self.currentChunk = entry.value_ptr.*;
+                    hasUpdated = true;
+                    std.debug.print("CHUNKPOS ATT:\nX:{}\nZ:{}\n", .{ self.currentChunk.x, self.currentChunk.z });
                 }
 
-                if (hasUpdated) {
-                    const px: i32 = @as(c_int, self.currentChunckPos.x);
-                    const pz: i32 = @as(c_int, self.currentChunckPos.z);
+                try chuncklist.append(self.allocator, chunck);
+            }
 
-                    std.sort.block(*Chunck, chuncklist.items, SortContext{
-                        .px = px,
-                        .pz = pz,
-                    }, lessThan);
-                } else {
-                    std.debug.print("BRAINFART\n", .{});
+            if (hasUpdated) {
+                const px: i32 = @as(c_int, self.currentChunk.x);
+                const pz: i32 = @as(c_int, self.currentChunk.z);
+
+                std.sort.block(*Chunck, chuncklist.items, SortContext{
+                    .px = px,
+                    .pz = pz,
+                }, lessThan);
+
+                for (chuncklist.items) |item| {
+                    std.debug.print("Distance2 : {}\n", .{dist2(item, @intFromFloat(pos_x), @intFromFloat(pos_z))});
                 }
-                //
-                // for (chuncklist.items) |item| {
-                //     std.debug.print("POS CHUNK: x: {} y: {}\n", .{ item.x, item.z });
-                // }
-
+            } else {
+                std.debug.print("BRAINFART\n", .{});
             }
         }
     }
@@ -113,13 +111,13 @@ pub const World = struct {
 fn lessThan(ctx: SortContext, a: *Chunck, b: *Chunck) bool {
     const dx_a = a.x - ctx.px;
     const dz_a = a.z - ctx.pz;
-    const da = dx_a * dx_a + dz_a * dz_a;
+    const da = (dx_a * dx_a) + (dz_a * dz_a);
 
     const dx_b = b.x - ctx.px;
     const dz_b = b.z - ctx.pz;
-    const db = dx_b * dx_b + dz_b * dz_b;
+    const db = (dx_b * dx_b) + (dz_b * dz_b);
 
-    return da < db;
+    return da > db;
 }
 
 fn dist2(chunk: *Chunck, px: i32, pz: i32) i32 {

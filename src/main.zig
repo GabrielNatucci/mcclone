@@ -27,7 +27,7 @@ pub fn main() !void {
         }
 
         try player.update(rl.getFrameTime());
-        try world.update(player.camera.position);
+        try world.updateChunkMoving(player.camera.position);
 
         rl.updateCamera(&player.camera, rl.CameraMode.first_person);
 
