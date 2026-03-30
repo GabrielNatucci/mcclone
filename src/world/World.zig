@@ -39,12 +39,13 @@ pub const World = struct {
 
     pub fn update(self: *World, position: rl.Vector3) !void {
         const lastChunck = self.getChunck(self.currentChunckPos.x, self.currentChunckPos.z);
-        const pos_x: i32 = @intFromFloat(position.x);
-        const pos_z: i32 = @intFromFloat(position.z);
+        const pos_x: f32 = position.x;
+        const pos_z: f32 = position.z;
         var hasUpdated: bool = false;
 
         if (lastChunck) |chun| {
-            if (!(pos_x < chun.xmax and pos_x > chun.xmin) or !(pos_z < chun.zmax and pos_z > chun.zmin)) {
+            if (!(chun.xmax > pos_x and chun.xmin < pos_x and chun.zmax > pos_z and chun.zmin < pos_z)) {
+                std.debug.print("chun minmax: Xmin:{} Xmax:{} Zmin:{} Zmax{}\n", .{ chun.xmin, chun.xmax, chun.zmin, chun.zmax });
                 var chuncklist: std.ArrayList(*Chunck) = .empty;
                 defer chuncklist.deinit(self.allocator);
                 var it = self.chunckMap.iterator();
@@ -69,7 +70,14 @@ pub const World = struct {
                         .px = px,
                         .pz = pz,
                     }, lessThan);
+                } else {
+                    std.debug.print("BRAINFART\n", .{});
                 }
+                //
+                // for (chuncklist.items) |item| {
+                //     std.debug.print("POS CHUNK: x: {} y: {}\n", .{ item.x, item.z });
+                // }
+
             }
         }
     }
